@@ -37,21 +37,12 @@ type Props = {
 }
 
 export default function RecipesCard({ recipe, showDelete = false, showAll = false, userRecipeId, variant = "default", isFavorite = false, isAdded = false }: Props) {
-  const [state, formAction] = useActionState(addToMyfavorites, { message: '' });
   const [showMessage, setShowMessage] = React.useState(false);
   const [favorite, setFavorite] = React.useState(isFavorite);
   const [added, setAdded] = React.useState(isAdded);
   const [portions, setPortions] = React.useState(Number(recipe.potion) || 1);
   const originalPortions = Number(recipe.potion) || 1;
   const router = useRouter();
-
-  React.useEffect(() => {
-    if (state.message) {
-      setShowMessage(true);
-      const timer = setTimeout(() => setShowMessage(false), 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [state.message]);
 
     React.useEffect(() => {
     setFavorite(isFavorite);
@@ -64,9 +55,11 @@ export default function RecipesCard({ recipe, showDelete = false, showAll = fals
       setFavorite(prev => !prev);
 
       if (!favorite) {
-        await addToMyfavorites(recipe); // fügt genau dieses Rezept hinzu
+        await addToMyfavorites(recipe);
+        setShowMessage(true);
+        setTimeout(() => setShowMessage(false), 1500);
       } else {
-        await deleteFromFavorites(recipe.id); // löscht genau dieses Rezept
+        await deleteFromFavorites(recipe.id);
       }
     };
 
