@@ -207,7 +207,7 @@ React.useEffect(() => {
               {/* Bild */}
               <div className="relative w-full h-[175px] rounded-t-lg overflow-hidden shadow-md">
                 <img
-                  src={recipe.image}
+                  src={recipe.image || '/public/yoshi.png'}
                   alt={recipe.title}
                   className="w-full h-full object-cover"
                 />
@@ -276,7 +276,7 @@ React.useEffect(() => {
                 <div className='bg-[#EED5C8] flex pl-5 pb-6 pt-1 rounded-2xl'>
                   <div className="relative w-[450px] h-[275px] mt-5 ml-2">
                     <img
-                      src={recipe.image}
+                      src={recipe.image || '/public/yoshi.png'}
                       alt={recipe.title}
                       className="w-full h-full object-cover rounded-xl"
                     />
@@ -399,7 +399,7 @@ React.useEffect(() => {
                       <div className='bg-[#FF6048] w-full'>
                         <div className="relative w-[92%] mx-auto h-[220px] overflow-hidden">
                           <img
-                            src={recipe.image}
+                            src={recipe.image || '/public/yoshi.png'}
                             alt={recipe.title}
                             className="w-full h-full mt-[1px] object-cover rounded-t-3xl"
                           />
