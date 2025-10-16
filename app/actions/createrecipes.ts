@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { nanoid } from "nanoid"; // oder uuid
+import { Recipes } from "@prisma/client";
 
 // Hilfsfunktion: erzeugt einen slug aus dem Titel
 function slugify(text: string) {
@@ -104,7 +105,7 @@ export async function deleteFromFavorites(recipeId: string) {
 }
 
 // Server-Action: Rezept in "Meine Rezepte" hinzufügen
-export async function addToUserRecipes(recipe: Recipe) {
+export async function addToUserRecipes(recipe: Recipes) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) return { message: "Nicht eingeloggt" };
