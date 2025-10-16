@@ -4,13 +4,10 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { editRecipe } from "@/app/actions/editRecipe";
 
-type EditPageParams = {
-  params: {
-    id: string;
-  };
-};
+export default async function EditRecipePage(props: unknown) {
+  // Type Assertion: props von Next.js auf { params: { id: string } } casten
+  const { params } = props as { params: { id: string } };
 
-export default async function EditRecipePage({ params }: EditPageParams) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
@@ -40,7 +37,9 @@ export default async function EditRecipePage({ params }: EditPageParams) {
         action={async (formData) => {
           "use server";
 
+          // OriginalId: Wenn Kopie -> parentId, sonst eigenes Id
           formData.append("originalId", recipe.parentId || recipe.id);
+
           await editRecipe(formData);
           redirect("/recipes");
         }}
@@ -77,6 +76,7 @@ export default async function EditRecipePage({ params }: EditPageParams) {
     </div>
   );
 }
+
 
 
 
