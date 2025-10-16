@@ -3,12 +3,18 @@ import { prisma } from '@/lib/prisma';
 import RecipesCard from '@/components/RecipesCard';
 import NavBar from '@/components/NavBar';
 
-export default async function page({ params }: { params: { slug: string}}) {
-    const recipe = await prisma.recipes.findUnique({
-        where: {
-          slug: params.slug,
-        },
-    });
+type Params = {
+  slug: string;
+};
+
+export default async function Page({ params }: { params: Promise<Params> }) {
+  const resolvedParams = await params; // ✅ Promise auflösen
+
+  const recipe = await prisma.recipes.findUnique({
+    where: {
+      slug: resolvedParams.slug,
+    },
+  });
 
   return (
     <div className='flex flex-col items-center relative'>
