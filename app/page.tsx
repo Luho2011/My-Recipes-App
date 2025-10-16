@@ -1,103 +1,190 @@
-import Image from "next/image";
+import { prisma } from '@/lib/prisma';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { genres } from '@/lib/genres';
+import NavBar from "@/components/NavBar";
+import RecipesCard from "@/components/RecipesCard";
+import Link from "next/link";
+import SearchBar from '@/components/SearchBar';
 
-export default function Home() {
+const PAGE_SIZE = 4;
+
+export default async function Home({ searchParams } : { searchParams: { q?: string; genre?: string; duration?: string; page?: string}}) {
+  const session = await getServerSession(authOptions);
+
+  const query = searchParams.q || '';
+  const genre = searchParams.genre || '';
+  const duration = searchParams.duration ? parseInt(searchParams.duration, 10) : null;
+  const page = parseInt(searchParams.page || "1", 10);
+
+  const where: any = {
+    AND: [
+      query ? { title: { contains: query, mode: "insensitive" } } : {},
+      genre ? { genre: { equals: genre, mode: "insensitive" } } : {},
+      duration ? { duration: { lte: duration } } : {},
+    ],
+  };
+
+  // Original-Rezepte
+  const recipes = await prisma.recipes.findMany({
+    where: { ...where, parentId: null },
+    take: PAGE_SIZE * page,
+    orderBy: { createdAt: "desc" },
+  });
+  const total = await prisma.recipes.count({ where });
+  const hasMore = total > PAGE_SIZE * page;
+
+  const pastaRecipes = await prisma.recipes.findMany({
+    where: { genre: "Nudelgerichte", parentId: null },
+    take: 4, // z. B. nur 6 anzeigen
+    orderBy: { createdAt: "desc" },
+  });
+
+  const soupRecipes = await prisma.recipes.findMany({
+    where: { genre: "Suppen", parentId: null },
+    take: 4, // z. B. nur 6 anzeigen
+    orderBy: { createdAt: "desc" },
+  });
+
+  const asiaRecipes = await prisma.recipes.findMany({
+    where: { genre: "Asiatisch", parentId: null },
+    take: 4, // z. B. nur 6 anzeigen
+    orderBy: { createdAt: "desc" },
+  });
+
+  // Favoriten
+  const favs = session
+    ? await prisma.myrecipes.findMany({
+        where: { userId: session.user.id },
+        include: { recipe: { select: { slug: true } } },
+      })
+    : [];
+  const favorites = favs.map(f => f.recipe.slug);
+
+// User-Rezepte (Kopien)
+const userRecipes = session
+  ? await prisma.userRecipes.findMany({
+      where: { userId: session.user.id },
+      select: { recipeId: true, originalId: true },
+    })
+  : [];
+
+// IDs der Original-Rezepte, die der User bereits hinzugefügt hat
+const addedOriginalIds = userRecipes.map(ur => ur.originalId);
+
+const isFiltered = !!genre || !!query || !!duration || page > 1;
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex flex-col items-center gap-6">
+      <NavBar showSearch={false}/>
+     <div className='w-2/3 md:h-22 md:px-6 md:mb-10 md:mt-10 flex items-center bg-[#EED5C8] rounded-[12px]'>
+       <SearchBar context="home" currentGenre={genre}/>
+     </div> 
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      <div className='flex flex-col'>
+        {!isFiltered && <h1 className='text-3xl mb-4 [@media(max-width:1472px)]:text-center'>Neuste Rezepte</h1>}
+        <div className="flex flex-wrap gap-5 justify-center mb-5">
+          {recipes.map((recipe) => (
+            <RecipesCard
+              key={recipe.id}
+              recipe={recipe}
+              isFavorite={favorites.includes(recipe.slug)}
+              isAdded={addedOriginalIds.includes(recipe.id)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {/* Load More Button */}
+          {hasMore && (
+            <Link
+              href={`/?page=${page + 1}${
+                query ? `&q=${query}` : ""
+              }${genre ? `&genre=${genre}` : ""}${
+                duration ? `&duration=${duration}` : ""
+              }`}
+              className='self-center'
+            >
+              <button className="mb-5 text-[#FF6048] cursor-pointer underline hover:text-[#eb3e2e]">
+                Mehr laden
+              </button>
+            </Link>
+          )}
+      </div>
+
+      {!isFiltered && (
+      <div className='flex flex-col'>
+        <h1 className='text-3xl mb-4 [@media(max-width:1472px)]:text-center'>Nudelgerichte</h1>
+          <div className="flex flex-wrap gap-5 justify-center mb-5">
+            {pastaRecipes.map((recipe) => (
+              <RecipesCard
+                key={recipe.id}
+                recipe={recipe}
+                isFavorite={favorites.includes(recipe.slug)}
+                isAdded={addedOriginalIds.includes(recipe.id)}
+              />
+            ))}
+          </div>
+            <Link 
+               key={genre} 
+               href={`/?genre=${encodeURIComponent("Nudelgerichte")}`}
+               className="self-center"
+              >
+                <button className="mb-5 text-[#FF6048] cursor-pointer underline hover:text-[#eb3e2e]">
+                  Mehr laden
+                </button>
+            </Link>
+      </div>
+      )}
+
+      {!isFiltered && (
+      <div className='flex flex-col'>
+        <h1 className='text-3xl mb-4 [@media(max-width:1472px)]:text-center'>Suppen</h1>
+          <div className="flex flex-wrap gap-5 justify-center mb-5">
+            {soupRecipes.map((recipe) => (
+              <RecipesCard
+                key={recipe.id}
+                recipe={recipe}
+                isFavorite={favorites.includes(recipe.slug)}
+                isAdded={addedOriginalIds.includes(recipe.id)}
+              />
+            ))}
+          </div>
+            <Link 
+               key={genre} 
+               href={`/?genre=${encodeURIComponent("Suppen")}`}
+               className="h-6 w-21 items-center"
+              >
+                <button className="mb-10 text-[#FF6048] cursor-pointer underline hover:text-[#eb3e2e]">
+                  Mehr laden
+                </button>
+            </Link>
+      </div>
+      )}
+
+      {!isFiltered && (
+      <div className='flex flex-col'>
+        <h1 className='text-3xl mb-4 [@media(max-width:1472px)]:text-center'>Asiatisch</h1>
+          <div className="flex flex-wrap gap-5 justify-center mb-5">
+            {asiaRecipes.map((recipe) => (
+              <RecipesCard
+                key={recipe.id}
+                recipe={recipe}
+                isFavorite={favorites.includes(recipe.slug)}
+                isAdded={addedOriginalIds.includes(recipe.id)}
+              />
+            ))}
+          </div>
+            <Link 
+               key={genre} 
+               href={`/?genre=${encodeURIComponent("Asiatisch")}`}
+               className="h-6 w-21 items-center"
+              >
+                <button className="mb-10 text-[#FF6048] cursor-pointer underline hover:text-[#eb3e2e]">
+                  Mehr laden
+                </button>
+            </Link>
+      </div>
+      )}
+
     </div>
   );
 }
