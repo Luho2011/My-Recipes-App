@@ -8,7 +8,7 @@ interface EditRecipePageProps {
   params: { id: string };
 }
 
-export default async function EditRecipePage({ params }: EditRecipePageProps): Promise<JSX.Element> {
+export default async function EditRecipePage({ params }: EditRecipePageProps) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
@@ -27,7 +27,10 @@ export default async function EditRecipePage({ params }: EditRecipePageProps): P
     );
   }
 
-  const recipe = await prisma.recipes.findUnique({ where: { id: params.id } });
+  // ✅ Type Assertion für params.id
+  const recipeId = params.id as string;
+
+  const recipe = await prisma.recipes.findUnique({ where: { id: recipeId } });
   if (!recipe) return <h1>Rezept nicht gefunden</h1>;
 
   return (
@@ -49,27 +52,19 @@ export default async function EditRecipePage({ params }: EditRecipePageProps): P
         <input type="text" name="title" defaultValue={recipe.title} className="border p-2 rounded" />
         <textarea name="description" defaultValue={recipe.description} className="border p-2 rounded h-24" />
         <textarea name="ingredients" defaultValue={recipe.ingredients} className="border p-2 rounded h-24" />
-        <select name="difficulty" 
-        className="border p-2 mb-2 w-full" defaultValue=""
-        >
+        <select name="difficulty" className="border p-2 mb-2 w-full" defaultValue="">
           <option value="leicht">Leicht</option>
           <option value="mittel">Mittel</option>
           <option value="schwer">Schwer</option>
         </select>
-        <input type="number" name="duration" defaultValue={recipe.duration} 
-        className="border p-2 mb-2 w-full" 
-        />
+        <input type="number" name="duration" defaultValue={recipe.duration} className="border p-2 mb-2 w-full" />
         <input type="text" name="genre" defaultValue={recipe.genre} className="border p-2 rounded" />
-        <select name="type" 
-        className="border p-2 mb-2 w-full" defaultValue={recipe.type}
-        >
+        <select name="type" className="border p-2 mb-2 w-full" defaultValue={recipe.type}>
           <option value="Vegetarisch">Vegetarisch</option>
           <option value="vegan">Vegan</option>
           <option value="omnivor">Omnivor</option>
         </select>
-        <input type="number" name="potion" placeholder={recipe.potion}
-         className="border p-2 mb-2 w-full" min="1"
-         />
+        <input type="number" name="potion" placeholder={recipe.potion?.toString()} className="border p-2 mb-2 w-full" min="1" />
         <input type="text" name="image" defaultValue={recipe.image ?? ""} className="border p-2 rounded" />
 
         <button type="submit" className="bg-green-600 text-white py-2 rounded hover:bg-green-700">
@@ -79,3 +74,4 @@ export default async function EditRecipePage({ params }: EditRecipePageProps): P
     </div>
   );
 }
+
