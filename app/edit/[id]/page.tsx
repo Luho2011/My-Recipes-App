@@ -4,8 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { editRecipe } from "@/app/actions/editRecipe";
 
-
-export default async function EditRecipePage({ params }: { params: { id: string } }) {
+export default async function EditRecipePage({ params }: any) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
@@ -35,9 +34,7 @@ export default async function EditRecipePage({ params }: { params: { id: string 
         action={async (formData) => {
           "use server";
 
-          // OriginalId: Wenn Kopie -> parentId, sonst eigenes Id
           formData.append("originalId", recipe.parentId || recipe.id);
-
           await editRecipe(formData);
           redirect("/recipes");
         }}
@@ -74,6 +71,7 @@ export default async function EditRecipePage({ params }: { params: { id: string 
     </div>
   );
 }
+
 
 
 
