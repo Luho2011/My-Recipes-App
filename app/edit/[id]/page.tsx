@@ -4,7 +4,13 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { editRecipe } from "@/app/actions/editRecipe";
 
-export default async function EditRecipePage({ params }: any) {
+type EditPageParams = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function EditRecipePage({ params }: EditPageParams) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
