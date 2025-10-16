@@ -65,13 +65,18 @@ export default async function MyRecipes({
       </div> 
       <h1 className="text-3xl">Meine Favoriten</h1>
       <div className="flex flex-wrap gap-5 justify-center mb-5">
-        {filtered.map((fav) => (
-          <RecipesCard
-            key={fav.recipe.id}
-            recipe={fav.recipe}
-            showDelete
-          />
-        ))}
+      {filtered.map(fav => (
+        <RecipesCard
+          key={fav.recipe.id}
+          recipe={{
+            ...fav.recipe,
+            duration: fav.recipe.duration.toString(),
+            potion: fav.recipe.potion.toString(),
+            image: fav.recipe.image || null,
+          }}
+          showDelete
+        />
+      ))}
       </div>
     </div>
   );

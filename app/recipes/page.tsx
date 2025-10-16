@@ -71,15 +71,20 @@ import SearchBar from "@/components/SearchBar";
            </div> 
       <h1 className="text-3xl">Meine Rezepte</h1>
         <div className="flex flex-wrap gap-5 justify-center mb-5">
-          {filtered.map((ur) => (
-            <RecipesCard
-              key={ur.recipe.id}
-              recipe={ur.recipe}
-              showAll
-              userRecipeId={ur.id}
-              isFavorite={favoriteIds.includes(ur.recipe.id)}
-            />
-          ))}
+        {filtered.map((ur) => (
+          <RecipesCard
+            key={ur.recipe.id}
+            recipe={{
+              ...ur.recipe,
+              duration: ur.recipe.duration.toString(),
+              potion: ur.recipe.potion.toString(),
+              image: ur.recipe.image || null,
+            }}
+            showAll
+            userRecipeId={ur.id}
+            isFavorite={favoriteIds.includes(ur.recipe.id)}
+          />
+        ))}
         </div>
     </div>
   );

@@ -99,14 +99,19 @@ export default async function Home({
           </h1>
         )}
         <div className="flex flex-wrap gap-5 justify-center mb-5">
-          {recipes.map((recipe) => (
-            <RecipesCard
-              key={recipe.id}
-              recipe={recipe}
-              isFavorite={favorites.includes(recipe.slug)}
-              isAdded={addedOriginalIds.includes(recipe.id)}
-            />
-          ))}
+        {recipes.map((recipe) => (
+          <RecipesCard
+            key={recipe.id}
+            recipe={{
+              ...recipe,
+              duration: recipe.duration.toString(),
+              potion: recipe.potion.toString(),
+              image: recipe.image || null,
+            }}
+            isFavorite={favorites.includes(recipe.slug)}
+            isAdded={addedOriginalIds.includes(recipe.id)}
+          />
+        ))}
         </div>
 
         {hasMore && (
@@ -133,14 +138,19 @@ export default async function Home({
               Nudelgerichte
             </h1>
             <div className="flex flex-wrap gap-5 justify-center mb-5">
-              {pastaRecipes.map((recipe) => (
-                <RecipesCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  isFavorite={favorites.includes(recipe.slug)}
-                  isAdded={addedOriginalIds.includes(recipe.id)}
-                />
-              ))}
+            {pastaRecipes.map((recipe) => (
+              <RecipesCard
+                key={recipe.id}
+                recipe={{
+                  ...recipe,
+                  duration: recipe.duration.toString(),
+                  potion: recipe.potion.toString(),
+                  image: recipe.image || null,
+                }}
+                isFavorite={favorites.includes(recipe.slug)}
+                isAdded={addedOriginalIds.includes(recipe.id)}
+              />
+            ))}
             </div>
             <Link
               href={`/?genre=${encodeURIComponent("Nudelgerichte")}`}
@@ -158,14 +168,19 @@ export default async function Home({
               Suppen
             </h1>
             <div className="flex flex-wrap gap-5 justify-center mb-5">
-              {soupRecipes.map((recipe) => (
-                <RecipesCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  isFavorite={favorites.includes(recipe.slug)}
-                  isAdded={addedOriginalIds.includes(recipe.id)}
-                />
-              ))}
+            {soupRecipes.map((recipe) => (
+              <RecipesCard
+                key={recipe.id}
+                recipe={{
+                  ...recipe,
+                  duration: recipe.duration.toString(),
+                  potion: recipe.potion.toString(),
+                  image: recipe.image || null,
+                }}
+                isFavorite={favorites.includes(recipe.slug)}
+                isAdded={addedOriginalIds.includes(recipe.id)}
+              />
+            ))}
             </div>
             <Link
               href={`/?genre=${encodeURIComponent("Suppen")}`}
@@ -183,14 +198,19 @@ export default async function Home({
               Asiatisch
             </h1>
             <div className="flex flex-wrap gap-5 justify-center mb-5">
-              {asiaRecipes.map((recipe) => (
-                <RecipesCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  isFavorite={favorites.includes(recipe.slug)}
-                  isAdded={addedOriginalIds.includes(recipe.id)}
-                />
-              ))}
+            {asiaRecipes.map((recipe) => (
+              <RecipesCard
+                key={recipe.id}
+                recipe={{
+                  ...recipe,
+                  duration: recipe.duration.toString(),
+                  potion: recipe.potion.toString(),
+                  image: recipe.image || null,
+                }}
+                isFavorite={favorites.includes(recipe.slug)}
+                isAdded={addedOriginalIds.includes(recipe.id)}
+              />
+            ))}
             </div>
             <Link
               href={`/?genre=${encodeURIComponent("Asiatisch")}`}
