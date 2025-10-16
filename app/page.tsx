@@ -1,11 +1,12 @@
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { genres } from '@/lib/genres';
 import NavBar from "@/components/NavBar";
 import RecipesCard from "@/components/RecipesCard";
 import Link from "next/link";
 import SearchBar from '@/components/SearchBar';
+
 
 const PAGE_SIZE = 4;
 
@@ -17,13 +18,13 @@ export default async function Home({ searchParams } : { searchParams: { q?: stri
   const duration = searchParams.duration ? parseInt(searchParams.duration, 10) : null;
   const page = parseInt(searchParams.page || "1", 10);
 
-  const where: any = {
-    AND: [
-      query ? { title: { contains: query, mode: "insensitive" } } : {},
-      genre ? { genre: { equals: genre, mode: "insensitive" } } : {},
-      duration ? { duration: { lte: duration } } : {},
-    ],
-  };
+const where: Prisma.RecipesWhereInput = {
+  AND: [
+    query ? { title: { contains: query, mode: "insensitive" } } : {},
+    genre ? { genre: { equals: genre, mode: "insensitive" } } : {},
+    duration ? { duration: { lte: duration } } : {},
+  ],
+};
 
   // Original-Rezepte
   const recipes = await prisma.recipes.findMany({

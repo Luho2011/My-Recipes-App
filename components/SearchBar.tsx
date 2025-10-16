@@ -12,11 +12,17 @@ type SearchBarProps = {
   currentGenre?: string;
 };
 
+type RecipeSuggestion = {
+  id: string;
+  title: string;
+  slug: string;
+};
+
 export default function SearchBar({ context, userId, currentGenre }: SearchBarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('q') || '');
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<RecipeSuggestion[]>([]);
   const [open, setOpen] = useState(false);
   const durations = [15, 30, 45, 60, 75, 90];
 
@@ -32,7 +38,7 @@ export default function SearchBar({ context, userId, currentGenre }: SearchBarPr
       if (userId) url += `&userId=${userId}`;
       if (currentGenre) url += `&genre=${currentGenre}`;
       const res = await fetch(url);
-      const data = await res.json();
+      const data: RecipeSuggestion[] = await res.json();
       setSuggestions(data);
     };
 
