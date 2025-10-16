@@ -6,10 +6,9 @@ import { editRecipe } from "@/app/actions/editRecipe";
 
 interface EditRecipePageProps {
   params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default async function EditRecipePage({ params }: EditRecipePageProps) {
+export default async function EditRecipePage({ params }: EditRecipePageProps): Promise<JSX.Element> {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
