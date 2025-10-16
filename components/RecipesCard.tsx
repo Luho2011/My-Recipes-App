@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 type Props = {
     recipe: {
-        image: React.JSX.Element;
+        image: string | null; 
         id: string;
         title: string;
         description: string;
