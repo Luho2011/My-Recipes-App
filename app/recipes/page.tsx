@@ -36,9 +36,9 @@ import SearchBar from "@/components/SearchBar";
     );
   }
 
-  const query = searchParams.q || '';
-  const genre = searchParams.genre || '';
-  const duration = searchParams.duration ? parseInt(searchParams.duration, 10) : null;
+  const query = params.q || '';
+  const genre = params.genre || '';
+  const duration = params.duration ? parseInt(params.duration, 10) : null;
 
   // Bearbeitete Rezepte des Users via userRecipes
   const userRecipes = await prisma.userRecipes.findMany({
