@@ -5,7 +5,19 @@ import NavBar from "@/components/NavBar";
 import RecipesCard from "@/components/RecipesCard";
 import SearchBar from "@/components/SearchBar";
 
-export default async function RecipesPage({ searchParams } : { searchParams: { q?: string }}) {
+  type SearchParams = {
+    q?: string;
+    genre?: string;
+    duration?: string;
+  };
+
+  export default async function RecipesPage({
+    searchParams,
+  }: {
+    searchParams: Promise<SearchParams>;
+  }) {
+    
+  const params = await searchParams; // ✅ Promise auflösen
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
