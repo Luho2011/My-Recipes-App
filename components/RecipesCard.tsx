@@ -65,13 +65,19 @@ export default function RecipesCard({ recipe, showDelete = false, showAll = fals
 
     const handleToggleAdd = async (e: React.MouseEvent) => {
       e.preventDefault();
-
       setAdded(prev => !prev);
 
       if (!added) {
-        await addToUserRecipes(recipe);
+        await addToUserRecipes({
+          ...recipe,
+          userId: '',           // optional, leer oder aus Session setzen
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          parentId: null,
+          duration: Number(recipe.duration), // convert string -> number
+        });
       } else {
-        await deleteFromUserRecipes(recipe.id)
+        await deleteFromUserRecipes(recipe.id);
       }
     };
 
