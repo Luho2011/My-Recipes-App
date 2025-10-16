@@ -4,14 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { editRecipe } from "@/app/actions/editRecipe";
 
-interface EditRecipePageProps {
-  params: {
-    id: string;
-  };
-}
 
-export default async function EditRecipePage(props: EditRecipePageProps) {
-  const { params } = props;
+export default async function EditRecipePage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
