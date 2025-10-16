@@ -172,7 +172,7 @@ React.useEffect(() => {
          }}
          className="cursor-pointer">
         <form
-          action={variant === "default" ? formAction : undefined}
+          action={undefined}
           className={`${variant === "default"
             ? 'bg-white rounded-xl shadow-md border border-gray-200 w-[350px] h-[235px] relative transition-transform duration-300 hover:scale-105'
             : 'bg-[#FBEBE3] w-full md:rounded-t-3xl md:w-[90%] md:max-w-[1400px] md:mx-auto flex flex-col items-center mt-3 mb-3 md:mt-8 md:mb-5 relative'}`}
