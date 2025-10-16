@@ -1,7 +1,6 @@
 "use server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import React from 'react'
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { nanoid } from "nanoid"; // oder uuid
@@ -20,7 +19,7 @@ function slugify(text: string) {
 
 // Hilfsfunktion: stellt sicher, dass der slug einzigartig ist
 async function generateUniqueSlug(title: string) {
-  let slug = slugify(title);
+  const slug = slugify(title);
   let uniqueSlug = slug;
   let count = 1;
 

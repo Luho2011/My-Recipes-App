@@ -1,30 +1,35 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+type RecipeResult = {
+  id: string;
+  title: string;
+  slug: string;
+};
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
   const context = searchParams.get("context") || "home";
   const userId = searchParams.get("userId") || undefined;
-  const genre = searchParams.get("genre") || ""; // 🔹 NEU
+  const genre = searchParams.get("genre") || "";
 
-  if (q.length < 2) return NextResponse.json([]);
+  if (q.length < 2) return NextResponse.json([] as RecipeResult[]);
 
-  let results: any[] = [];
+  let results: RecipeResult[] = [];
 
   if (context === "home") {
-    // 🔹 Nur Original-Rezepte, optional nach Genre filtern
     results = await prisma.recipes.findMany({
       where: {
         parentId: null,
         title: { contains: q, mode: "insensitive" },
-        ...(genre ? { genre: { equals: genre, mode: "insensitive" } } : {}), // 🔥 wichtig
+        ...(genre ? { genre: { equals: genre, mode: "insensitive" } } : {}),
       },
       select: { id: true, title: true, slug: true },
       take: 5,
     });
   } else if (context === "favorites") {
-    if (!userId) return NextResponse.json([]);
+    if (!userId) return NextResponse.json([] as RecipeResult[]);
     const favs = await prisma.myrecipes.findMany({
       where: { userId },
       include: { recipe: true },
@@ -36,17 +41,18 @@ export async function GET(req: Request) {
         const matchesGenre = genre
           ? r.genre?.toLowerCase() === genre.toLowerCase()
           : true;
-        return matchesQuery && matchesGenre; // 🔥 nur Treffer im Genre
+        return matchesQuery && matchesGenre;
       })
-      .slice(0, 5);
+      .slice(0, 5)
+      .map(r => ({ id: r.id, title: r.title, slug: r.slug })); // nur die 3 Felder
   } else if (context === "recipes") {
-    if (!userId) return NextResponse.json([]);
+    if (!userId) return NextResponse.json([] as RecipeResult[]);
     results = await prisma.recipes.findMany({
       where: {
         parentId: { not: null },
         userId,
         title: { contains: q, mode: "insensitive" },
-        ...(genre ? { genre: { equals: genre, mode: "insensitive" } } : {}), // 🔥 auch hier
+        ...(genre ? { genre: { equals: genre, mode: "insensitive" } } : {}),
       },
       select: { id: true, title: true, slug: true },
       take: 5,
@@ -55,6 +61,7 @@ export async function GET(req: Request) {
 
   return NextResponse.json(results);
 }
+
 
 
 
