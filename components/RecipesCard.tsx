@@ -8,7 +8,6 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { PlusCircleIcon as PlusCircleIconOutline } from '@heroicons/react/24/outline';
 import { PlusCircleIcon as PlusCircleIconSolid } from '@heroicons/react/24/solid';
 import DeleteButton from './DeleteButton';
-import { useActionState } from 'react';
 import { addToMyfavorites, addToUserRecipes } from '@/app/actions/createrecipes'
 import { deleteFromFavorites, deleteFromUserRecipes } from '@/app/actions/createrecipes'
 import Link from 'next/link';
@@ -412,7 +411,17 @@ React.useEffect(() => {
                       </div>
 
                       {/* Info-Bereich */}
-                      <div className="pt-3 pl-5">
+                      <div className="pt-3 pl-5 relative">
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                router.push(`/edit/${recipe.id}`);
+                              }}
+                              className="absolute top-2 right-8 cursor-pointer transition-transform duration-300 hover:scale-110"
+                              >
+                                <PencilSquareIcon className="h-8 w-8 text-black z-10" />
+                            </button>
                         <p className='border border-amber-300 rounded-[8px] p-1 bg-amber-300 w-fit mb-2 text-[13px] text-black'>
                           {recipe.genre}
                         </p>

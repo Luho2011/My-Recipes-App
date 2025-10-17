@@ -52,7 +52,7 @@ export default async function EditRecipePage({
           await editRecipe(formData);
           redirect("/recipes");
         }}
-        className="w-[500px] md:w-[750px] flex flex-col gap-4 bg-white shadow-md rounded-xl p-6"
+        className="w-[400px] md:w-[750px] flex flex-col gap-4 bg-white shadow-md rounded-xl p-6"
       >
         <input
           type="text"
@@ -103,7 +103,7 @@ export default async function EditRecipePage({
         <input
           type="number"
           name="potion"
-          placeholder={recipe.potion?.toString() ?? "1"}
+          defaultValue={recipe.potion}
           className="border p-2 mb-2 w-full"
           min="1"
         />

@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { genres } from '@/lib/genres';
-import Link from 'next/link';
 import { useSearchParams, useRouter  } from 'next/navigation';
 
 export default function GenreFilter({ context = "home", userId }: { context?: "home" | "favorites" | "recipes", userId?: string }) {
@@ -14,7 +13,7 @@ export default function GenreFilter({ context = "home", userId }: { context?: "h
     const genreFromParams = searchParams.get("genre");
     if (genreFromParams) {
       setSelectedGenre(genreFromParams);
-    } else setSelectedGenre("Rezepart")
+    } else setSelectedGenre("Rezeptart")
   }, [searchParams]);
   
   const getBasePath = () => {

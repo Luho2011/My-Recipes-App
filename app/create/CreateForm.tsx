@@ -52,7 +52,7 @@ export default function CreateForm() {
         <h1 className='text-3xl mt-3'>Erstelle dein Rezept</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className='bg-white w-[500px] md:w-[750px] mt-10 flex flex-col items-center rounded-2xl px-6'>
+      <form onSubmit={handleSubmit} className='bg-white w-[400px] md:w-[750px] mt-10 flex flex-col items-center rounded-2xl px-6'>
         <input type='text' placeholder='Titel...' name='title'
         required
         onInvalid={(e) => e.currentTarget.setCustomValidity('Bitte gib einen Titel ein')}
