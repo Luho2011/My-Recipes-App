@@ -5,8 +5,10 @@ import { useActionState } from 'react';
 import { createRecipe } from '../actions/createrecipes';
 import { startTransition } from "react";
 import NavBar from '@/components/NavBar';
+import { useRouter } from "next/navigation";
 
 export default function CreateForm() {
+  const router = useRouter();
   const [state, formAction] = useActionState(createRecipe, { message: '' });
   const [showMessage, setShowMessage] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -40,8 +42,10 @@ export default function CreateForm() {
     const formData = new FormData(e.currentTarget);
     formData.append("image", imageUrl); // ✅ URL direkt hinzufügen
 
-      startTransition(() => {
-    formAction(formData); // ohne await hier, state wird korrekt getrackt
+    startTransition(async () => {
+    await formAction(formData); // ohne await hier, state wird korrekt getrackt
+    router.push("/");
+    router.refresh(); 
   });
   }
 
@@ -65,7 +69,7 @@ export default function CreateForm() {
         onInput={(e) => e.currentTarget.setCustomValidity('')}
         className='border p-2 mb-2 w-full'
          />
-        <textarea placeholder='Beschreibung...(Nach jeder Phase (1,2,3 etc.) neuer Absatz)' name='description'
+        <textarea placeholder={'1. Nudeln kochen\n Beschreibung\n Absatz \n 2. Zwiebeln vorbereiten \n Beschreibung\n Absatz'} name='description'
         className='border p-2 mb-2 w-full'
         required
         onInvalid={(e) => e.currentTarget.setCustomValidity('Bitte gib Beschreibung an')}
@@ -137,7 +141,7 @@ export default function CreateForm() {
         </button>
 
         {showMessage && (
-          <div className="absolute top-25 left-1/2 -translate-x-1/2 bg-green-600 text-white text-sm p-2 rounded shadow transition">
+          <div className="absolute bot-25 left-1/2 -translate-x-1/2 bg-green-600 text-white text-sm p-2 rounded shadow transition">
             <h1>Rezept erstellt</h1>
           </div>
         )}

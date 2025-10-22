@@ -263,7 +263,7 @@ React.useEffect(() => {
               </div>
 
               {/* Titel */}
-              <h2 className="text-[22px] text-gray-800 mt-2 ml-5 w-[230px]">{recipe.title}</h2>
+              <h2 className="text-[21px] text-gray-800 mt-2 ml-5 w-[268px] truncate overflow-hidden text-ellipsis whitespace-nowrap">{recipe.title}</h2>
             </>
           )}
 

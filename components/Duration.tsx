@@ -65,12 +65,12 @@ export default function Duration({ context }: { context: "home" | "favorites" | 
               ))}
               <hr className="my-1 border-amber-200" />
 
-<button
-  onClick={() => handleDurationClick(null)} // <-- Reset
-  className="block w-full px-2 py-1 hover:bg-amber-50 rounded cursor-pointer text-gray-500"
->
-  Alle
-</button>
+              <button
+                onClick={() => handleDurationClick(null)} // <-- Reset
+                className="block w-full px-2 py-1 hover:bg-amber-50 rounded cursor-pointer text-gray-500"
+              >
+                Alle
+              </button>
             </div>
           )}
 
