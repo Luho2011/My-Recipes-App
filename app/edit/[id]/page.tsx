@@ -13,7 +13,7 @@ export default async function EditRecipePage({
 }: {
   params: Promise<Params>;
 }) {
-  const { id } = await params; // ✅ Promise auflösen (Next.js 15 verlangt das)
+  const { id } = await params; // Promise auflösen (Next.js 15 verlangt das)
 
   const session = await getServerSession(authOptions);
 
@@ -46,7 +46,7 @@ export default async function EditRecipePage({
         action={async (formData) => {
           "use server";
 
-          // OriginalId: Wenn Kopie -> parentId, sonst eigenes Id
+          // OriginalId: parentId (orignal) wird angehängt, sonst eigene Id anhängen: recipe.id = id der kopie
           formData.append("originalId", recipe.parentId || recipe.id);
 
           await editRecipe(formData);

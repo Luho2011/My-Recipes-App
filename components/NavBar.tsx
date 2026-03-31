@@ -98,7 +98,7 @@ return (
     {/* --- DESKTOP NAVBAR --- */}
     <div className="hidden md:flex items-center justify-between h-16 w-full flex-wrap gap-y-2">
       
-      {/* ✅ Linke Seite */}
+      {/* Linke Seite */}
       <div className="flex items-center gap-4 flex-shrink-0 justify-items-start">
         <div className="bg-[#eb3e2e] py-[10px] px-15 h-16">
           <Link href="/" className="text-white text-3xl font-bold">
@@ -115,14 +115,14 @@ return (
         </Link>
       </div>
 
-      {/* ✅ Mitte (Searchbar) */}
+      {/* Mitte (Searchbar) */}
       {showSearch && (
         <div className="flex-1 max-w-md mx-6 w-full">
           <SearchBar context={context} userId={userId} />
         </div>
       )}
 
-      {/* ✅ Rechte Seite */}
+      {/* Rechte Seite */}
       <div className="[@media(max-width:1169px)]:mr-0 flex items-center gap-6 flex-shrink flex-wrap mr-25">
         <Link href="/recipes" className="flex items-center hover:scale-105">
           <BookOpenIcon className="h-5 w-5 mr-1 text-white" />

@@ -24,7 +24,7 @@ export default function DeleteButton({ id, context = "favorites" }: Props) {
       if (!confirmed) return;
 
         startTransition(() => {
-            actionFn(id); // 👈 direkt ID übergeben, kein FormData mehr
+            actionFn(id); // direkt ID übergeben, kein FormData mehr
         });
     };
 

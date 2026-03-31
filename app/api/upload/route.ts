@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
 
-// Helper: upload buffer to Cloudinary
+// upload buffer Cloudinary
 function streamUpload(buffer: Buffer): Promise<string> {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(

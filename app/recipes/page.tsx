@@ -17,7 +17,7 @@ import SearchBar from "@/components/SearchBar";
     searchParams: Promise<SearchParams>;
   }) {
     
-  const params = await searchParams; // ✅ Promise auflösen
+  const params = await searchParams; // Promise auflösen (Next.js 15 verlangt das)
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
@@ -48,12 +48,12 @@ import SearchBar from "@/components/SearchBar";
   });
 
 
-  // Filter nach Such-Query
+  // Filter nach Such-Query, Duration und Genre. Wenn kein FIlter genutzt, alles true damit alle rezepte angezeigt werden
   const filtered = userRecipes.filter(ur => {
     const r = ur.recipe;
     const matchesQuery = query ? r.title.toLowerCase().includes(query.toLowerCase()) : true;
     const matchesDuration = duration ? r.duration <= duration : true;
-    const matchesGenre = genre ? r.genre === genre : true; // <-- neu
+    const matchesGenre = genre ? r.genre === genre : true;
     return matchesQuery && matchesDuration && matchesGenre;
   });
 

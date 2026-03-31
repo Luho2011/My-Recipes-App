@@ -3,7 +3,7 @@ import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string; // 👈 so kennt TS jetzt .id
+      id: string; // so kennt TS jetzt .id überall
     } & DefaultSession["user"];
   }
 

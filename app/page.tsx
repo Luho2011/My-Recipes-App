@@ -21,7 +21,7 @@ export default async function Home({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const params = await searchParams; // ✅ Promise auflösen (Pflicht in Next 15)
+  const params = await searchParams; // Promise auflösen (Pflicht in Next 15)
   const session = await getServerSession(authOptions);
 
   const query = params.q || '';
@@ -29,6 +29,7 @@ export default async function Home({
   const duration = params.duration ? parseInt(params.duration, 10) : null;
   const page = parseInt(params.page || "1", 10);
 
+  // where ist Prismafilter: suche Rezepte nach Titel mit Suchbegriff (query), genre die = filter sind und duration
   const where: Prisma.RecipesWhereInput = {
     AND: [
       query ? { title: { contains: query, mode: "insensitive" } } : {},
@@ -64,7 +65,7 @@ export default async function Home({
     orderBy: { createdAt: "desc" },
   });
 
-  // Favoriten
+  // Favoriten in favorites speichern
   const favs = session
     ? await prisma.myrecipes.findMany({
         where: { userId: session.user.id },
@@ -73,7 +74,7 @@ export default async function Home({
     : [];
   const favorites = favs.map((f) => f.recipe.slug);
 
-  // User-Rezepte (Kopien)
+  // User-Rezepte (Kopien) in addedOriginalIds speichern
   const userRecipes = session
     ? await prisma.userRecipes.findMany({
         where: { userId: session.user.id },
@@ -83,6 +84,7 @@ export default async function Home({
 
   const addedOriginalIds = userRecipes.map((ur) => ur.originalId);
 
+  // Wird filter benutzt? Falls nicht, keine filter aktiv, Rezepte standardmäßig anzeigen
   const isFiltered = !!genre || !!query || !!duration || page > 1;
 
   return (

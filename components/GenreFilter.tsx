@@ -9,6 +9,7 @@ export default function GenreFilter({ context = "home", userId }: { context?: "h
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // url ändert sich?(searchParams): router änder unten url
   useEffect(() => {
     const genreFromParams = searchParams.get("genre");
     if (genreFromParams) {
@@ -16,6 +17,7 @@ export default function GenreFilter({ context = "home", userId }: { context?: "h
     } else setSelectedGenre("Rezeptart")
   }, [searchParams]);
   
+  // bekommt context als prop von den seiten
   const getBasePath = () => {
     if (context === "favorites") return "/myrecipes";
     if (context === "recipes") return "/recipes";
@@ -32,7 +34,7 @@ export default function GenreFilter({ context = "home", userId }: { context?: "h
       params.delete("genre");
       setSelectedGenre("Rezeptart");
     }
-
+    // getBasePath function aufrufen
     router.push(`${getBasePath()}?${params.toString()}`);
     setOpen(false);
   };

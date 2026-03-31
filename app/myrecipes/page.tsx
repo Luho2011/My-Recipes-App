@@ -17,7 +17,7 @@ export default async function MyRecipes({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const params = await searchParams; // ✅ Promise auflösen (Pflicht ab Next 15)
+  const params = await searchParams; // Promise auflösen (Next.js 15 verlangt das)
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
@@ -46,7 +46,8 @@ export default async function MyRecipes({
     include: { recipe: true },
   });
 
-  // Filter nach Query und Genres (nur in Favoriten)
+  // Filter nach Such-Query, Duration und Genre. Wenn kein Filter genutzt, alles true damit alle rezepte angezeigt werden (nur in Favoriten).
+  // wird nach lasa gesucht und genre = suppe --> unten return true, true, false. kein rezept wird angezeigt
   const filtered = myRecipes.filter((fav) => {
     const recipe = fav.recipe;
     const matchesQuery = query

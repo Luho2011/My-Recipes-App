@@ -3,12 +3,13 @@ import { prisma } from '@/lib/prisma';
 import RecipesCard from '@/components/RecipesCard';
 import NavBar from '@/components/NavBar';
 
+// liest den slug aus (params)
 type Params = {
   slug: string;
 };
 
 export default async function Page({ params }: { params: Promise<Params> }) {
-  const resolvedParams = await params; // ✅ Promise auflösen
+  const resolvedParams = await params; // Promise auflösen (Next.js 15 verlangt das)
 
   const recipe = await prisma.recipes.findUnique({
     where: {
@@ -25,6 +26,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   }
 
     const recipeForCard = {
+    // spread operator kopiert alle eigenschaften von recipe (id, title, duration, potion...)  
     ...recipe,
     image: recipe.image || null,
     duration: recipe.duration.toString(),

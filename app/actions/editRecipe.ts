@@ -24,7 +24,7 @@ export async function editRecipe(formData: FormData) {
   const potion = formData.get("potion") as string;
   const image = formData.get("image") as string | null;
 
-  // Prüfen, ob schon eine Kopie dieses Originals für den User existiert
+  // Prüfen, ob schon eine Kopie dieses Originals für den User existiert: Es ist eine Kopie, wenn es eine originalId enthällt...unten weiter machen mit updaten der Kopie
   const existingLink = await prisma.userRecipes.findFirst({
     where: {
       userId,
@@ -65,7 +65,7 @@ export async function editRecipe(formData: FormData) {
         type,
         potion,
         image,
-        parentId: originalId, // Verweis auf Original
+        parentId: originalId, // Verweis auf Original, heißt dies wird eine Kopie davon
         userId,
       },
     });

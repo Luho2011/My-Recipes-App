@@ -21,7 +21,7 @@ export default function CreateForm() {
     }
   }, [state.message]);
 
-  // ---------------- File Upload ----------------
+  // File Upload
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -34,13 +34,13 @@ export default function CreateForm() {
     if (data.secure_url) setImageUrl(data.secure_url);
   }
 
-  // ---------------- Form Submit ----------------
+  // Form Submit
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!imageUrl) return alert("Bitte ein Bild hochladen!");
 
     const formData = new FormData(e.currentTarget);
-    formData.append("image", imageUrl); // ✅ URL direkt hinzufügen
+    formData.append("image", imageUrl); // URL direkt hinzufügen
 
     startTransition(async () => {
     await formAction(formData); // ohne await hier, state wird korrekt getrackt

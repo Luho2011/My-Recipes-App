@@ -26,7 +26,7 @@ export default function SearchBar({ context, userId, currentGenre }: SearchBarPr
   const [open, setOpen] = useState(false);
   const durations = [15, 30, 45, 60, 75, 90];
 
-  // 🔹 Fetch Vorschläge vom Server
+  // Fetch Vorschläge vom Server: Eingabequery und context werden an api/search übergeben: debounce --> damit nicht direkt gefiltert wird bei jedem buchstaben sofort
   useEffect(() => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -127,7 +127,7 @@ const handleDurationClick = (min: number) => {
                 context === "home"
                   ? `/?q=${recipe.title}${currentGenre ? `&genre=${currentGenre}` : '' }`
                   : context === "favorites"
-                  ? `/myrecipes?q=${recipe.title}` // ✅ Favoriten-Link
+                  ? `/myrecipes?q=${recipe.title}` // Favoriten-Link
                   : `/recipes?q=${recipe.title}`
               }
               className="block px-3 py-2 hover:bg-gray-100 rounded-xl"

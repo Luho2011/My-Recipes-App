@@ -8,6 +8,7 @@ type RecipeResult = {
 };
 
 export async function GET(req: Request) {
+  //erhält url mit queryanfrage aus beispielsweise homepage searchbar ("Kartoffel") und wird in q gespeichert. unten genutzt title. containts: Kartoffel
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
   const context = searchParams.get("context") || "home";

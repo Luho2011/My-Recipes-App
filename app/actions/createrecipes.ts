@@ -11,6 +11,7 @@ function slugify(text: string) {
   if (!text) text = "untitled"; // fallback, falls kein Titel
   return text
     .toLowerCase()
+    // bindesstriche und sonderzeichen etc entfernen
     .replace(/\s+/g, '-')       
     .replace(/[^\w\-]+/g, '')   
     .replace(/\-\-+/g, '-')     
@@ -18,7 +19,7 @@ function slugify(text: string) {
     .replace(/-+$/, '');
 }
 
-// Hilfsfunktion: stellt sicher, dass der slug einzigartig ist
+// Hilfsfunktion: stellt sicher, dass der slug einzigartig ist, count anhängen sonst
 async function generateUniqueSlug(title: string) {
   const slug = slugify(title);
   let uniqueSlug = slug;
@@ -59,7 +60,7 @@ export async function createRecipe(prevState: unknown, formData: FormData) {
       genre,
       type,
       potion: potion.toString(),
-      image, // ✅ Cloudinary URL
+      image, // Cloudinary URL
       user: { connect: { id: userId } },
     },
   });
@@ -74,7 +75,7 @@ export async function addToMyfavorites(recipe: { id: string }) {
   const userId = session?.user?.id;
   if (!userId) return { message: "Nicht eingeloggt" };
 
-  // 💡 Favorit immer genau das aktuelle Rezept (egal ob Original oder Kopie)
+  // Favorit immer genau das aktuelle Rezept (egal ob Original oder Kopie)
   await prisma.myrecipes.create({
     data: {
       user: { connect: { id: userId } },
@@ -116,7 +117,7 @@ export async function addToUserRecipes(recipe: Recipes) {
   });
   if (!original) return { message: "Rezept nicht gefunden" };
 
-  // Kopie erstellen
+  // Kopie erstellen in recipes
   const newRecipe = await prisma.recipes.create({
     data: {
       title: original.title,
@@ -134,7 +135,7 @@ export async function addToUserRecipes(recipe: Recipes) {
     },
   });
 
-  // Relation in UserRecipes anlegen
+  // Relation in UserRecipes anlegen, in userrecipes sind verweise auf die kopien. 
   await prisma.userRecipes.create({
     data: {
       userId,
@@ -146,6 +147,7 @@ export async function addToUserRecipes(recipe: Recipes) {
   return { message: "Rezept hinzugefügt" };
 }
 
+// kopien in recipes werden gelöscht und somit auch die verweise in userrecipes
 export async function deleteFromUserRecipes(userRecipeId: string) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
