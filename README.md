@@ -31,13 +31,13 @@ The application is built using the Next.js App Router while using server and cli
 
 ## ⚙️ Challenges & Decisions
 
-1. Data Handling & Performance** 
+1. Data Handling & Performance
 Efficient processing and rendering of recipe data using server-side rendering and optimized queries.
 
-2. URL & Layout Sync**  
+2. URL & Layout Sync
 Dynamic handling of search queries and URL parameters to automatically update the page layout.
 
-3. Scalable Component Structure**  
+3. Scalable Component Structure
 Building reusable UI components for better maintainability and scalability.
 
 ## 📸 Screenshots
