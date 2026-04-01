@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+#  Recipe App
 
-## Getting Started
+Modern fullstack web application to create, manage, and explore personal recipes.
 
-First, run the development server:
+## 🚀 Live Demo
+👉 https://my-recipes-app-henna.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🛠️ Tech Stack
+- Next.js (App Router)
+- TypeScript
+- Prisma
+- Tailwind CSS
+- Docker
+- Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
+- User authentication  
+- Create, update and delete recipes (CRUD)  
+- Favorites system for personalized recipes 
+- Search and filtering functionalities  
+- Fully responsive design (mobile-first)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧠 Architecture & Implementation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application is built using the Next.js App Router while using server and client components.
 
-## Learn More
+- Server Components for data fetching and performance optimization (server actions)  
+- Client Components for interactive UI elements  
+- Prisma for data modeling and database access  
+- Structured API communication to separate logic and presentation 
 
-To learn more about Next.js, take a look at the following resources:
+## ⚙️ Challenges & Decisions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Data Handling & Performance** 
+Efficient processing and rendering of recipe data using server-side rendering and optimized queries.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. URL & Layout Sync**  
+Dynamic handling of search queries and URL parameters to automatically update the page layout.
 
-## Deploy on Vercel
+3. Scalable Component Structure**  
+Building reusable UI components for better maintainability and scalability.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📸 Screenshots
+![Screenshot recipes-app3](https://github.com/user-attachments/assets/57668a67-6f68-4e7a-b965-8fe220b48701)
+![Screenshot recipes-app2](https://github.com/user-attachments/assets/b7d1768f-cbc1-4fbe-a31f-f17c5d9220a7)
+![Screenshot recipes-app](https://github.com/user-attachments/assets/e2ad7214-286c-41e7-afca-266131d1aed3)
