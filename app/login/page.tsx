@@ -13,6 +13,19 @@ export default function Login() {
            <FcGoogle className="w-7 h-7" />
            Sign in with Google  
         </button>
+
+      <button
+        onClick={() =>
+          signIn("credentials", {
+            email: "demorecipes@example.com",
+            password: "demo123",
+            callbackUrl: "/",
+          })
+        }
+        className="border px-6 py-2 mt-5 rounded shadow hover:bg-gray-100 transition cursor-pointer"
+      >
+        Demo Login
+      </button>
     </div>
   )
 }
