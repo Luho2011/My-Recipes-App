@@ -29,7 +29,7 @@ export default async function Home({
   const duration = params.duration ? parseInt(params.duration, 10) : null;
   const page = parseInt(params.page || "1", 10);
 
-  // where ist Prismafilter: suche Rezepte nach Titel mit Suchbegriff (query), genre die = filter sind und duration
+  // where ist Prismafilter: suche Rezepte nach Titel mit Suchbegriff (query), genre die = filter sind und duration. keine filter genutzt -> {}
   const where: Prisma.RecipesWhereInput = {
     AND: [
       query ? { title: { contains: query, mode: "insensitive" } } : {},

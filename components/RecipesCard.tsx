@@ -11,6 +11,7 @@ import DeleteButton from './DeleteButton';
 import { addToMyfavorites, addToUserRecipes } from '@/app/actions/createrecipes'
 import { deleteFromFavorites, deleteFromUserRecipes } from '@/app/actions/createrecipes'
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -205,10 +206,12 @@ React.useEffect(() => {
             <>
               {/* Bild */}
               <div className="relative w-full h-[175px] rounded-t-lg overflow-hidden shadow-md">
-                <img
-                  src={recipe.image || '/public/yoshi.png'}
+                <Image
+                  src={recipe.image || '/yoshi.png'}
                   alt={recipe.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="350px"
+                  className="object-cover"
                 />
 
                 {/* --- Buttons --- */}
@@ -274,10 +277,13 @@ React.useEffect(() => {
               <div className="hidden md:flex flex-col bg-[#FBEBE3] rounded-xl w-full max-w-[1400px] mx-auto">
                 <div className='bg-[#EED5C8] flex pl-5 pb-6 pt-1 rounded-2xl'>
                   <div className="relative w-[450px] h-[275px] mt-5 ml-2">
-                    <img
-                      src={recipe.image || '/public/yoshi.png'}
+                    <Image
+                      src={recipe.image || '/yoshi.png'}
                       alt={recipe.title}
-                      className="w-full h-full object-cover rounded-xl"
+                      fill
+                      sizes="450px"
+                      priority
+                      className="object-cover rounded-xl"
                     />
                    {showAll ? (
                   <>
@@ -397,10 +403,13 @@ React.useEffect(() => {
                       {/* Bild + TabList */}
                       <div className='bg-[#FF6048] w-full'>
                         <div className="relative w-[92%] mx-auto h-[220px] overflow-hidden">
-                          <img
-                            src={recipe.image || '/public/yoshi.png'}
+                          <Image
+                            src={recipe.image || '/yoshi.png'}
                             alt={recipe.title}
-                            className="w-full h-full mt-[1px] object-cover rounded-t-3xl"
+                            fill
+                            sizes="92vw"
+                            priority
+                            className="mt-[1px] object-cover rounded-t-3xl"
                           />
                           <TabList className="absolute bottom-0 left-7 flex gap-2">
                             <Tab className="react-tabs__tab">Zutaten</Tab>

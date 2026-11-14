@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { cache } from 'react'
+import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import RecipesCard from '@/components/RecipesCard';
 import NavBar from '@/components/NavBar';
@@ -8,14 +9,45 @@ type Params = {
   slug: string;
 };
 
+// cache(): generateMetadata und Page rufen getRecipe mit demselben slug auf,
+// die DB wird pro Request aber nur einmal abgefragt.
+const getRecipe = cache(async (slug: string) => {
+  return prisma.recipes.findUnique({ where: { slug } });
+});
+
+export async function generateMetadata(
+  { params }: { params: Promise<Params> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const recipe = await getRecipe(slug);
+
+  if (!recipe) {
+    return { title: 'Rezept nicht gefunden', robots: { index: false } };
+  }
+
+  // Zeilenumbrüche/Mehrfach-Leerzeichen zusammenfassen und auf ~155 Zeichen kürzen
+  const text = recipe.description.replace(/\s+/g, ' ').trim();
+  const description = text.length > 155 ? `${text.slice(0, 154).trimEnd()}…` : text;
+  const url = `/recipesdetails/${slug}`;
+
+  return {
+    title: recipe.title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: recipe.title,
+      description,
+      url,
+      type: 'article',
+      images: [recipe.image || '/yoshi.png'],
+    },
+  };
+}
+
 export default async function Page({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params; // Promise auflösen (Next.js 15 verlangt das)
 
-  const recipe = await prisma.recipes.findUnique({
-    where: {
-      slug: resolvedParams.slug,
-    },
-  });
+  const recipe = await getRecipe(resolvedParams.slug);
 
     if (!recipe) {
     return (

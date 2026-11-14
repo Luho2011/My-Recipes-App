@@ -16,7 +16,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   recipes       Recipes[]
-  myrecipes     Myrecipes[]
+  myrecipes     Myrecipes[] //back relation: somit kann ich myrecipe.user und user.myrecipe nutzen
 
   UserRecipes UserRecipes[]
 }
@@ -75,11 +75,11 @@ model Recipes {
 
   parentId String?   
   parent   Recipes?  @relation("RecipeParent", fields: [parentId], references: [id])
-  children Recipes[] @relation("RecipeParent")
+  children Recipes[] @relation("RecipeParent") // für mehrere variationen von rezepten wie beispielsweise pizza -> tonno, salami etc
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) //Cascade -> user löschen -> alle rezepte löschen
 
-  Myrecipes Myrecipes[]
+  Myrecipes Myrecipes[] 
 
   UserRecipes UserRecipes[]
 }
