@@ -15,6 +15,15 @@ const getRecipe = cache(async (slug: string) => {
   return prisma.recipes.findUnique({ where: { slug } });
 });
 
+// ISR: Seite wird statisch erzeugt und spätestens nach 1 h neu validiert
+export const revalidate = 3600;
+
+// Alle vorhandenen Rezepte beim Build vorrendern (SSG)
+export async function generateStaticParams() {
+  const recipes = await prisma.recipes.findMany({ select: { slug: true } });
+  return recipes.map((r) => ({ slug: r.slug }));
+}
+
 export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {

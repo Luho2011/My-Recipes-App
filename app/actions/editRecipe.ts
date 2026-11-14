@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function editRecipe(formData: FormData) {
   const session = await getServerSession(authOptions);
@@ -49,6 +50,7 @@ export async function editRecipe(formData: FormData) {
         image,
       },
     });
+    revalidatePath(`/recipesdetails/${existingLink.recipe.slug}`);
   } else {
     // Neue Kopie erstellen
     const slug = `${title.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`;
@@ -78,6 +80,7 @@ export async function editRecipe(formData: FormData) {
         originalId,
       },
     });
+    revalidatePath(`/recipesdetails/${slug}`);
   }
 
   return { message: "Rezept erfolgreich gespeichert" };
